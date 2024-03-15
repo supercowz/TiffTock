@@ -78,4 +78,3 @@ python3 scheduler.py
 2. Change the `create_reminder()` function in `__init__.py` to validate your new type.
 3. Write your custom code in `reminder.py` by creating a class that inherits from the `RemindProcess` abstract class. Put your custom code in the `remind` function.
 4. Add a new remind process to the `registered_remind_processes` dictionary in `reminder_factory.py`
-# TiffTock
