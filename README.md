@@ -8,7 +8,7 @@ This application does the following:
 ## Uses & Use Cases
 If you're a developer, hobbyist or a tinkerer and you need a simple way to make stuff happen automatically at specific times, this tool is pretty much what you need. Think of it as a DIY version of AWS Lambda but way easier to get into. In this codebase, a "Reminder Process" is the term I use that is analogous to a "Lambda" function.
 
-Originally, I just wanted something to help my girlfriend remember stuff. She always asks me, "hey, can you remind me to do X?" To which I always respond, "Why don't you use Siri?" I could use Siri myself and then just pass the message along, or I could spend all day writing a program to do it for me! Efficiency! Anyway, that's why this codebase is around the context of reminders. That said, the custom code you can write doesn't have to be a reminder, it can essentially be anything you want that runs at a predetermined time that you can schedule with an API call.
+Originally, I just wanted something to help my girlfriend remember stuff. She always asks me, "hey, can you remind me to do X?" To which I always respond, "Why don't you use Siri?" I could use Siri myself and then just pass the message along, or I could spend all day writing a program to do it for me! Efficiency! Anyway, that's why this codebase is around the context of reminders. That said, the custom code you write doesn't have to be a reminder, it can be anything you want that runs at a time that you can schedule with an API call.
 
 To create a block of code to run at a scheduled time, simply write a class that inherits the RemindProcess abstract class and write your custom code inside of the "remind" function.
 
