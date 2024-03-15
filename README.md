@@ -30,6 +30,7 @@ I wrote this to solve my own problem, so I didn't think about sending reminders 
 
 ## YEAH YEAH YEAH, JUST TELL ME HOW TO RUN IT
 ### Flask API
+
 **Create .env file**
 Open the `.sampleenv` file in the app directory and use it to create a file in the same directory called `.env`
 
