@@ -32,6 +32,7 @@ I wrote this to solve my own problem, so I didn't think about sending reminders 
 ### Flask API
 
 **Create .env file**
+
 Open the `.sampleenv` file in the app directory and use it to create a file in the same directory called `.env`
 
 This file is where you will keep all of your secrets and app settings.
