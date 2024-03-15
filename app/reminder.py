@@ -1,4 +1,5 @@
 import os
+import requests
 from abc import ABC, abstractmethod
 
 class RemindProcess(ABC):
@@ -8,18 +9,12 @@ class RemindProcess(ABC):
       raise ValueError('id is required')
     if reminder.get('when') is None:
       raise ValueError('when is required')
-    if reminder.get('message') is None: 
+    if reminder.get('message') is None:
       raise ValueError('message is required')
     
     self.id = reminder['id']
     self.when = reminder['when']
     self.message = reminder['message']
-  
-  @abstractmethod
-  def __init__(self, id, when, message):
-    self.id = id
-    self.when = when
-    self.message = message
 
   '''
   Do the reminder action. For example, send an email.'''
@@ -29,23 +24,42 @@ class RemindProcess(ABC):
 
 class EmailRemindProcess(RemindProcess):
   def __init__(self, reminder):
+    self.__setup_mailgun()
     super().__init__(reminder)
-  
-  def __init__(self, id, when, message):
-    super().__init__(id, when, message)
+
+  def __setup_mailgun(self):
+    if os.environ.get('MAILGUN_API_KEY') is None:
+      raise ValueError('MAILGUN_API_KEY is required')
+    if os.environ.get('MAILGUN_EMAIL_FROM') is None:
+      raise ValueError('MAILGUN_EMAIL_FROM is required')
+    if os.environ.get('MAILGUN_EMAIL_TO') is None:
+      raise ValueError('MAILGUN_EMAIL_TO is required')
+    if os.environ.get('MAILGUN_EMAIL_DOMAIN') is None:
+      raise ValueError('MAILGUN_EMAIL_DOMAIN is required')
+    
+    self.mailgun_api_key = os.environ['MAILGUN_API_KEY']
+    self.mailgun_email_from = os.environ['MAILGUN_EMAIL_FROM']
+    self.mailgun_email_to = os.environ['MAILGUN_EMAIL_TO']
+    self.mailgun_email_domain = os.environ['MAILGUN_EMAIL_DOMAIN']
 
   def remind(self, message: str):
-    print(f"Sending email to {self.message} with message: {message}")
+    response = requests.post(
+    f"https://api.mailgun.net/v3/{self.mailgun_email_domain}/messages",
+    auth=("api", self.mailgun_api_key), 
+    data={
+      f"from": f"Chris Bednar <{self.mailgun_email_from}>",
+      "to": [f"{self.mailgun_email_to}"],
+      "subject": "This is a test message from mailgun",
+      "text": message
+    })
+
+    return response
 
 from twilio.rest import Client
 class SMSRemindProcess(RemindProcess):
   def __init__(self, reminder):
     self.__setup_twilio()
     super().__init__(reminder)
-  
-  def __init__(self, id, when, message):
-    self.__setup_twilio()
-    super().__init__(id, when, message)
 
   def __setup_twilio(self):
     if os.environ.get('TWILIO_ACCOUNT_SID') is None:
@@ -72,25 +86,27 @@ class SMSRemindProcess(RemindProcess):
         to=self.twilio_phone_number_to
       )
     
+    return message
+    
 class APIRemindProcess(RemindProcess):
   def __init__(self, reminder):
+    self.__setup_api()
     super().__init__(reminder)
+
+  def __setup_api(self):
+    if os.environ.get('API_REMIND_URL') is None:
+      raise ValueError('API_REMIND_URL is required')
+    
+    self.api_remind_url = os.environ['API_REMIND_URL']
   
-  def __init__(self, id, when, message):
-    super().__init__(id, when, message)
-
+  # In the future, we can add more functionality to this method. 
+  # For now, the API endpoint is hardcoded, assumed to be a POST and the message is the only parameter
   def remind(self, message: str):
-    print(f"Sending API request to {self.message} with message: {message}")
+    response = requests.post(
+      self.api_remind_url,
+      json={
+        'message': message
+      }
+    )
 
-# def send_email(message):
-#   return requests.post(
-# 		"https://api.mailgun.net/v3/sandbox3801ca6e8cb7450cbe0dfe2a282021a5.mailgun.org/messages",
-# 		auth=("api", MAILGUN_API_KEY), 
-# 		data={
-#       f"from": f"Chris Bednar <{MAILGUN_EMAIL_FROM}>",
-# 			"to": [f"{MAILGUN_EMAIL_TO}"],
-# 			"subject": "This is a test message from mailgun",
-# 			"text": message
-#     })
-
-# def send_sms(message):
+    return response
