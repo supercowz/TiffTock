@@ -1,0 +1,17 @@
+Create a file called .env that looks something like this:
+You need at least the API_KEY and API_URL for the app to work.
+The other keys are for the Twilio and Mailgun services if you are using them.
+
+------------------------------ .env ------------------------------
+
+API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+API_URL=http://localhost:5000
+
+TWILIO_ACCOUNT_SID=XXXXXXXXXXXX
+TWILIO_AUTH_TOKEN=XXXXXXXXXXX
+TWILIO_PHONE_NUMBER_FROM=+1XXXXXXXXXX
+TWILIO_PHONE_NUMBER_TO=+1XXXXXXXXXX
+
+MAILGUN_API_KEY=XXXXXXXXXXXXXXX
+MAILGUN_EMAIL_TO=email@email.com
+MAILGUN_EMAIL_FROM=mailgun@XXXXXXXXXX.mailgun.org
